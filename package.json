@@ -1,0 +1,14 @@
+{
+  "name": "uniswap_ui_on_ic_frontend",
+  "version": "0.1.0",
+  "description": "Uniswap UI on Internet Computer",
+  "keywords": ["Internet Computer", "Uniswap", "Canister"],
+  "license": "GPL-3.0-or-later",
+  "scripts": {
+    "setup": "cd src/interface && yarn install && dfx deploy",
+    "build": "cd src/interface && yarn run build && cd ../..",
+    "start": "cd src/interface && yarn run start",
+    "serve": "cd src/interface && yarn run serve",
+    "deploy": "dfx deploy"
+  }
+}

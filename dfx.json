@@ -1,0 +1,35 @@
+{
+  "canisters": {
+    "signer": {
+      "candid": "src/signer/signer.did",
+      "package": "signer",
+      "type": "rust"
+    },
+    "interface": {
+      "dependencies": ["signer"],
+      "frontend": {
+        "entrypoint": "src/interface/build/index.html"
+      },
+      "source": ["src/interface/build"],
+      "type": "assets"
+    },
+    "internet_identity": {
+      "type": "custom",
+      "candid": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity.did",
+      "wasm": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity_dev.wasm",
+      "remote": {
+        "id": {
+          "ic": "rdmx6-jaaaa-aaaaa-aaadq-cai"
+        }
+      },
+      "frontend": {}
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "version": 1
+}
