@@ -10,7 +10,11 @@
 ## Build
 
 ```
-git clone --recurse-submodules
 yarn run setup
+```
+
+To start the UI in a dev server with hot-reload use
+```
+yarn run start
 ```
 
