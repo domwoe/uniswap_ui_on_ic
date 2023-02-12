@@ -16,7 +16,7 @@ import { Connector } from "@web3-react/types";
 import { ethers, Signer, UnsignedTransaction } from "ethers";
 import { canisterId, createActor } from "../declarations/signer";
 
-const INFURA_API_KEY = null;
+const INFURA_API_KEY = "";
 const ETH_NETWORK = "goerli";
 const CHAIN_ID = 0x5;
 
@@ -46,36 +46,32 @@ class InternetComputerSigner extends Signer {
     return new InternetComputerSigner();
   }
 
-  // async getAddress(): Promise<string> {
-  //   console.log("Fetching public key from canister")
-  //   return this.canisterSigner
-  //     .public_key_query()
-  //     .then((res: any) => {
-  //       console.log("No error");
-  //       console.log(res)
-  //     })
-  //     .catch((err: any) => {
-  //       this.canisterSigner.public_key().then((res: any) => {
-  //         console.log(res)
-  //         if (res.Ok && res.Ok.public_key) {
-  //           return ethers.utils.computeAddress(res.Ok.public_key);
-  //         } else {
-  //           throw new Error("Could not get public key from canister")
-  //         }
-  //       });
-  //     });
-  // }
-
   async getAddress(): Promise<string> {
     console.log("Fetching public key from canister");
-
-    return this.canisterSigner.public_key().then((res: any) => {
-      if (res.Ok && res.Ok.public_key) {
-        return ethers.utils.computeAddress(res.Ok.public_key);
-      } else {
-        throw new Error("Could not get public key from canister");
-      }
-    })
+    return this.canisterSigner
+      .public_key_query()
+      .then((res: any) => {
+        if (res.Ok && res.Ok.public_key) {
+          return ethers.utils.computeAddress(res.Ok.public_key);
+        } else {
+          return this.canisterSigner.public_key().then((res: any) => {
+            if (res.Ok && res.Ok.public_key) {
+              return ethers.utils.computeAddress(res.Ok.public_key);
+            } else {
+              throw new Error("Could not get public key from canister");
+            }
+          });
+        }
+      })
+      .catch((err: any) => {
+        this.canisterSigner.public_key().then((res: any) => {
+          if (res.Ok && res.Ok.public_key) {
+            return ethers.utils.computeAddress(res.Ok.public_key);
+          } else {
+            throw new Error("Could not get public key from canister");
+          }
+        });
+      });
   }
 
   async getFeeData(): Promise<FeeData> {
@@ -296,7 +292,6 @@ export class InternetComputer extends Connector {
         agent,
       });
 
-      console.log(signer);
       if (this.provider) {
         // @ts-ignore
         this.provider.signer.canisterSigner = signer;

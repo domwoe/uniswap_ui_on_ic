@@ -13,10 +13,10 @@ const GOOGLE_ANALYTICS_ID: string | undefined = process.env.REACT_APP_GOOGLE_ANA
 
 const storedClientId = window.localStorage.getItem(GOOGLE_ANALYTICS_CLIENT_ID_STORAGE_KEY)
 
-const googleAnalytics = new GoogleAnalyticsProvider()
+// const googleAnalytics = new GoogleAnalyticsProvider()
 
 export function sendEvent(event: string | UaEventOptions, params?: any) {
-  return googleAnalytics.sendEvent(event, params)
+  // return googleAnalytics.sendEvent(event, params)
 }
 
 export function outboundLink(
@@ -27,32 +27,32 @@ export function outboundLink(
   },
   hitCallback: () => unknown
 ) {
-  return googleAnalytics.outboundLink({ label }, hitCallback)
+  // return googleAnalytics.outboundLink({ label }, hitCallback)
 }
 
 export function sendTiming(timingCategory: any, timingVar: any, timingValue: any, timingLabel: any) {
-  return googleAnalytics.gaCommandSendTiming(timingCategory, timingVar, timingValue, timingLabel)
+  // return googleAnalytics.gaCommandSendTiming(timingCategory, timingVar, timingValue, timingLabel)
 }
 
-if (typeof GOOGLE_ANALYTICS_ID === 'string') {
-  googleAnalytics.initialize(GOOGLE_ANALYTICS_ID, {
-    gaOptions: {
-      storage: 'none',
-      storeGac: false,
-      clientId: storedClientId ?? undefined,
-    },
-  })
-  googleAnalytics.set({
-    anonymizeIp: true,
-    customBrowserType: !isMobile
-      ? 'desktop'
-      : 'web3' in window || 'ethereum' in window
-      ? 'mobileWeb3'
-      : 'mobileRegular',
-  })
-} else {
-  googleAnalytics.initialize('test', { gtagOptions: { debug_mode: true } })
-}
+// if (typeof GOOGLE_ANALYTICS_ID === 'string') {
+//   googleAnalytics.initialize(GOOGLE_ANALYTICS_ID, {
+//     gaOptions: {
+//       storage: 'none',
+//       storeGac: false,
+//       clientId: storedClientId ?? undefined,
+//     },
+//   })
+//   googleAnalytics.set({
+//     anonymizeIp: true,
+//     customBrowserType: !isMobile
+//       ? 'desktop'
+//       : 'web3' in window || 'ethereum' in window
+//       ? 'mobileWeb3'
+//       : 'mobileRegular',
+//   })
+// } else {
+//   googleAnalytics.initialize('test', { gtagOptions: { debug_mode: true } })
+// }
 
 const installed = Boolean(window.navigator.serviceWorker?.controller)
 const hit = Boolean((window as any).__isDocumentCached)

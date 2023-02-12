@@ -95,6 +95,11 @@ export enum Currency {
   Usd = 'USD'
 }
 
+export enum DatasourceProvider {
+  Nxyz = 'NXYZ',
+  Uniswap = 'UNISWAP'
+}
+
 export type Dimensions = {
   __typename?: 'Dimensions';
   height?: Maybe<Scalars['Float']>;
@@ -544,6 +549,20 @@ export type PairInput = {
   tokenAmountB: TokenAmountInput;
 };
 
+export type PermitDetailsInput = {
+  amount: Scalars['String'];
+  expiration: Scalars['String'];
+  nonce: Scalars['String'];
+  token: Scalars['String'];
+};
+
+export type PermitInput = {
+  details: PermitDetailsInput;
+  sigDeadline: Scalars['String'];
+  signature: Scalars['String'];
+  spender: Scalars['String'];
+};
+
 /**   v3 pool parameters as defined by https://github.com/Uniswap/v3-sdk/blob/main/src/entities/pool.ts */
 export type PoolInput = {
   fee: Scalars['Int'];
@@ -579,7 +598,6 @@ export type PortfolioTokensTotalDenominatedValueChangeArgs = {
 
 export type Query = {
   __typename?: 'Query';
-  assetActivities?: Maybe<Array<Maybe<AssetActivity>>>;
   nftAssets?: Maybe<NftAssetConnection>;
   nftBalances?: Maybe<NftBalanceConnection>;
   nftCollections?: Maybe<NftCollectionConnection>;
@@ -592,13 +610,6 @@ export type Query = {
   tokenProjects?: Maybe<Array<Maybe<TokenProject>>>;
   tokens?: Maybe<Array<Maybe<Token>>>;
   topTokens?: Maybe<Array<Maybe<Token>>>;
-};
-
-
-export type QueryAssetActivitiesArgs = {
-  address: Scalars['String'];
-  page?: InputMaybe<Scalars['Int']>;
-  pageSize?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -867,6 +878,7 @@ export enum TokenStandard {
 }
 
 export type TokenTradeInput = {
+  permit?: InputMaybe<PermitInput>;
   routes?: InputMaybe<TokenTradeRoutesInput>;
   slippageToleranceBasisPoints?: InputMaybe<Scalars['Int']>;
   tokenAmount: TokenAmountInput;

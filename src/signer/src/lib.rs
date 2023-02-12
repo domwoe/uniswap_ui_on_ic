@@ -21,13 +21,70 @@ struct SignatureReply {
 
 #[derive(Clone, Debug, CandidType, Deserialize, Default)]
 struct State {
-    keys: HashMap<Principal, Vec<u8>>,
+    pub keys: HashMap<Principal, Vec<u8>>,
+    pub config: Config,
 }
 
 type CanisterId = Principal;
 
+#[derive(CandidType, Deserialize, Debug, Clone, PartialEq, Default)]
+pub enum Environment {
+    #[default]
+    Development,
+    Staging,
+    Production,
+}
+
+#[derive(CandidType, Deserialize, Debug, Clone)]
+pub struct Config {
+    pub env: Environment,
+    pub key_name: String,
+    pub sign_cycles: u64,
+}
+
+impl Default for Config {
+    fn default() -> Self {
+        Self::from(Environment::Development)
+    }
+}
+
+impl From<Environment> for Config {
+    fn from(env: Environment) -> Self {
+        if env == Environment::Staging {
+            Self {
+                env: Environment::Staging,
+                key_name: "test_key_1".to_string(),
+                sign_cycles: 10_000_000_000,
+            }
+        } else if env == Environment::Production {
+            Self {
+                env: Environment::Production,
+                key_name: "key_1".to_string(),
+                sign_cycles: 26_153_846_153,
+            }
+        } else {
+            Self {
+                env: Environment::Development,
+                key_name: "dfx_test_key".to_string(),
+                sign_cycles: 0,
+            }
+        }
+    }
+}
+
 thread_local! {
     static STATE: std::cell::RefCell<State> = std::cell::RefCell::new(State::default());
+}
+
+// Pattern is taken from https://github.com/nikolas-con/ic-evm-sign
+#[ic_cdk_macros::init]
+fn init(env_opt: Option<Environment>) {
+    if let Some(env) = env_opt {
+        STATE.with(|s| {
+            let mut state = s.borrow_mut();
+            state.config = Config::from(env);
+        })
+    }
 }
 
 #[query]
@@ -48,12 +105,16 @@ fn public_key_query() -> Result<PublicKeyReply, String> {
 
 #[update]
 async fn public_key() -> Result<PublicKeyReply, String> {
-    
     let caller = ic_cdk::caller();
-    
+
+    let key_name = STATE.with(|s| {
+        let state = s.borrow();
+        state.config.key_name.clone()
+    });
+
     let key_id = EcdsaKeyId {
         curve: EcdsaCurve::Secp256k1,
-        name: "dfx_test_key".to_string(),
+        name: key_name,
     };
 
     let ic_management_canister_id = "aaaaa-aa";
@@ -83,9 +144,14 @@ async fn public_key() -> Result<PublicKeyReply, String> {
 async fn sign(message: Vec<u8>) -> Result<SignatureReply, String> {
     assert!(message.len() == 32);
 
+    let config = STATE.with(|s| {
+        let state = s.borrow();
+        state.config.clone()
+    });
+
     let key_id = EcdsaKeyId {
         curve: EcdsaCurve::Secp256k1,
-        name: "dfx_test_key".to_string(),
+        name: config.key_name,
     };
     let ic_management_canister_id = "aaaaa-aa";
     let ic = CanisterId::from_str(ic_management_canister_id).unwrap();
@@ -97,7 +163,7 @@ async fn sign(message: Vec<u8>) -> Result<SignatureReply, String> {
         key_id,
     };
     let (res,): (SignWithEcdsaResponse,) =
-        ic_cdk::api::call::call_with_payment(ic, "sign_with_ecdsa", (request,), 25_000_000_000)
+        ic_cdk::api::call::call_with_payment(ic, "sign_with_ecdsa", (request,), config.sign_cycles)
             .await
             .map_err(|e| format!("Failed to call sign_with_ecdsa {}", e.1))?;
 
@@ -105,7 +171,6 @@ async fn sign(message: Vec<u8>) -> Result<SignatureReply, String> {
         signature: res.signature,
     })
 }
-
 
 #[pre_upgrade]
 fn pre_upgrade() {

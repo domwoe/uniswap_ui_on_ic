@@ -1298,7 +1298,7 @@
     debug "^3.1.0"
     lodash.once "^4.1.1"
 
-"@dfinity/agent@^0.15.1":
+"@dfinity/agent@^0.15.3":
   version "0.15.3"
   resolved "https://registry.yarnpkg.com/@dfinity/agent/-/agent-0.15.3.tgz#ea7061bcac38c75ecae281579e9934e0139b3d6d"
   integrity sha512-yjJnAWI2CQY9kAFgavXU4TiKjb3NwaKUpu2LwCfgtJM4k6ofKlW+7q0tBJNs5WvHqRcKRDdn4d6yXKQi+ubS+w==
@@ -1310,21 +1310,21 @@
     simple-cbor "^0.4.1"
     ts-node "^10.8.2"
 
-"@dfinity/auth-client@^0.15.1":
+"@dfinity/auth-client@^0.15.3":
   version "0.15.3"
   resolved "https://registry.yarnpkg.com/@dfinity/auth-client/-/auth-client-0.15.3.tgz#b89916947f3a44ee97178eaa9ed15bddf1dde8b1"
   integrity sha512-yM+0v1zKvPWVbOR1akvDcEMfHIvCSa7dII6jXrD/EW+VEcH7LhcWJIUIqz4vQw/QXXTB/CNKa6k7jvjr1XdXbw==
   dependencies:
     idb "^7.0.2"
 
-"@dfinity/candid@^0.15.1":
+"@dfinity/candid@^0.15.3":
   version "0.15.3"
   resolved "https://registry.yarnpkg.com/@dfinity/candid/-/candid-0.15.3.tgz#8a09660d12e16cee1a64cd684316844ebd76e678"
   integrity sha512-jbfA+kr+gCrBuwxWm/j4Vpqzbnh9bsyUWu9CjopJis8xdxH3FIfNDWOzHZ/QaW7Co+6UoON1wzxMiy91/W5DQA==
   dependencies:
     ts-node "^10.8.2"
 
-"@dfinity/identity@^0.15.1":
+"@dfinity/identity@^0.15.3":
   version "0.15.3"
   resolved "https://registry.yarnpkg.com/@dfinity/identity/-/identity-0.15.3.tgz#2fe177b14b40bd9df3de6023158d80c0648c0e88"
   integrity sha512-D5Sf01MvO3CO63nAYSdG2V8Ox4AEVAm+/O7oKU1oyg8m3z/9zklG6IyCOOKb6hQibWh81j+mduYuX4vYuEjSGw==
@@ -1333,7 +1333,7 @@
     js-sha256 "^0.9.0"
     tweetnacl "^1.0.1"
 
-"@dfinity/principal@^0.15.1":
+"@dfinity/principal@^0.15.3":
   version "0.15.3"
   resolved "https://registry.yarnpkg.com/@dfinity/principal/-/principal-0.15.3.tgz#53e65842dab09e97a04f6f6c70944de965172d89"
   integrity sha512-XqHZVaJx/acmg6kFkF7PB156UwAquOS2WiAA753+nGKTG+TOC7OxbBXCr8vfEsd0mEzcmcLl+jLF8iUsC6Hk4w==

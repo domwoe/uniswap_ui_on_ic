@@ -6,7 +6,6 @@
       "type": "rust"
     },
     "interface": {
-      "dependencies": ["signer"],
       "frontend": {
         "entrypoint": "src/interface/build/index.html"
       },

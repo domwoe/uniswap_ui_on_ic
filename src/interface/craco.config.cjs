@@ -44,8 +44,6 @@ const canisterEnvVariables = initCanisterEnv();
 
 const internetIdentityUrl = network === "local" ? `http://localhost:4943/?canisterId=${canisterEnvVariables["INTERNET_IDENTITY_CANISTER_ID"]}` : `https://identity.ic0.app`
 
-console.log(internetIdentityUrl);
-
 module.exports = {
   devServer: {
     proxy: {
