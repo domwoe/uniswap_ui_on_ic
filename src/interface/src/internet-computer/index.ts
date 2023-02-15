@@ -16,7 +16,7 @@ import { Connector } from "@web3-react/types";
 import { ethers, Signer, UnsignedTransaction } from "ethers";
 import { canisterId, createActor } from "../declarations/signer";
 
-const INFURA_API_KEY = "";
+const INFURA_API_KEY = "Enter your API key here";
 const ETH_NETWORK = "goerli";
 const CHAIN_ID = 0x5;
 
