@@ -8,7 +8,7 @@ Furthermore, this example includes the usage of a simple canister-based signer, 
 
 ## Usage demo
 
-![demo](./assets/demo.mp4)
+[![demo](/assets/demo_pic.png)](./assets/demo.mp4)
 
 https://twitter.com/dominic_w/status/1574546360418070528
 
