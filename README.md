@@ -8,9 +8,9 @@ Furthermore, this example includes the usage of a simple canister-based signer, 
 
 ## Usage demo
 
-[![demo](/assets/demo_pic.png)](/assets/demo.mp4)
+[![demo](./assets/demo_pic.png)](./assets/demo.mp4)
 
-<video src="/assets/demo.mp4" controls="controls" style="max-width: 730px;">
+<video src="./assets/demo.mp4" controls="controls" style="max-width: 730px;">
 </video>
 
 https://twitter.com/dominic_w/status/1574546360418070528
