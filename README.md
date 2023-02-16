@@ -4,9 +4,11 @@
 
 Canister smart contracts on the [Internet Computer](https://internetcomputer.org)(IC) can serve web applications directly to browsers. This can be utilized by protocols built on other blockchain platforms to host user interfaces reliably and securely. This example demonstrates this for the open-source [Uniswap interface](https://github.com/Uniswap/interface) to interact with the Uniswap protocol. The cool thing: Having the user interface on the Internet Computer can enable the autonomous upgrading of interfaces controlled by a DAO.
 
-Furthermore, this example includes the usage of a simple canister-based signer, where signatures can be authorized using [WebAuthn](https://webauthn.io/), and the signatures are created by the Internet Computer using [Chain-key signatures](https://internetcomputer.org/docs/current/developer-docs/integrations/t-ecdsa/). The implementation is simplified and shouldn't be used with main net tokens, since there is no guarantee that this canister-based signer will not run out of cycles. Also, there's currently no way to transfer funds to another wallet. The only thing you can do is swap tokens on Uniswap.
+Furthermore, this example includes the usage of a simple canister-based signer, where signatures can be authorized using [WebAuthn](https://webauthn.io/), and the signatures are created by the Internet Computer using [Chain-key signatures](https://internetcomputer.org/docs/current/developer-docs/integrations/t-ecdsa/)(threshold ECDSA). The implementation is simplified and shouldn't be used with main net tokens, since there is no guarantee that this canister-based signer will not run out of cycles. Also, there's currently no way to transfer funds to another wallet. The only thing you can do is swap tokens on Uniswap.
 
 ## Usage demo
+
+![demo](./assets/demo.mp4)
 
 https://twitter.com/dominic_w/status/1574546360418070528
 
@@ -38,7 +40,7 @@ yarn run setup
 This will start a local Internet Computer node and deploy the project to the local node.
 After a while, you should see something like
 
-![terminal](./images/terminal.png)
+![terminal](./assets/terminal.png)
 
 and you can navigate your browser to the (Uniswap) interface: `http://127.0.0.1:4943/?canisterId=rrkah-fqaaa-aaaaa-aaaaq-cai` (in this case).
 
@@ -71,13 +73,15 @@ I've deployed the project to the IC. You can interact with the Uniswap interface
 https://yrog5-xqaaa-aaaap-qa5za-cai.ic0.app/
 ```
 
-You can interact with the deployed version of the signer using Candiid UI at:
+If you want to swap some tokens, you'll need testnet (Goerli) ETH in your canister wallet first. You can request testnet ETH at http://goerlifaucet.com.
+
+You can interact with the deployed version of the signer using Candid UI at:
 ```
 https://a4gq6-oaaaa-aaaab-qaa4q-cai.raw.ic0.app/?id=ywpaj-2iaaa-aaaap-qa5zq-cai
 ```
 ## Architecture
 
-![architecture](./images/uniswap_ui_on_ic_architecture.png)
+![architecture](./assets/uniswap_ui_on_ic_architecture.png)
 
 ### Static UI in asset canister
 
