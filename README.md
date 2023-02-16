@@ -102,6 +102,8 @@ An asset canister serves certified assets, i.e. a client can verify the authenti
 
 To demonstrate the canister-based signer, we implemented an [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) compatible provider. The provider mostly uses an Infura RPC provider under the hood, but interacts with the signer canister to get the Ethereum account and to sign transactions. Furthermore, the provider uses Internet Identity to authenticate the user to the signer canister, such that each user controls a unique Ethereum account.
 
+The code can be found in [`/src/interface/src/internet-computer/index.ts`](/src/interface/src/internet-computer/index.ts).
+
 
 ### Internet Identity
 
