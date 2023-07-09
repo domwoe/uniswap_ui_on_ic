@@ -5,6 +5,7 @@
   "homepage": ".",
   "license": "GPL-3.0-or-later",
   "scripts": {
+    "setup": "yarn install && dfx deploy",
     "ajv": "node scripts/compile-ajv-validators.js",
     "contracts:compile:abi": "typechain --target ethers-v5 --out-dir src/abis/types \"./src/abis/**/*.json\"",
     "contracts:compile:v3": "typechain --target ethers-v5 --out-dir src/types/v3 \"./node_modules/@uniswap/**/artifacts/contracts/**/*[!dbg].json\"",
@@ -135,14 +136,19 @@
     "ts-transform-graphql-tag": "^0.2.1",
     "typechain": "^5.0.0",
     "typescript": "^4.4.3",
-    "wrangler": "https://prerelease-registry.devprod.cloudflare.dev/workers-sdk/runs/4925945367/npm-package-wrangler-3048",
     "webpack-retry-chunk-load-plugin": "^3.1.1",
+    "wrangler": "https://prerelease-registry.devprod.cloudflare.dev/workers-sdk/runs/4925945367/npm-package-wrangler-3048",
     "yarn-deduplicate": "^6.0.0"
   },
   "dependencies": {
     "@apollo/client": "^3.7.2",
     "@coinbase/wallet-sdk": "^3.6.4",
     "@cypress/code-coverage": "^3.10.0",
+    "@dfinity/agent": "^0.17.0",
+    "@dfinity/auth-client": "^0.17.0",
+    "@dfinity/candid": "^0.17.0",
+    "@dfinity/identity": "^0.17.0",
+    "@dfinity/principal": "^0.17.0",
     "@fontsource/ibm-plex-mono": "^4.5.1",
     "@fontsource/inter": "^4.5.1",
     "@graphql-codegen/cli": "^2.15.0",

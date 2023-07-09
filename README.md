@@ -1,80 +1,132 @@
-# Uniswap Labs Interface
+# Demo: Uniswap UI on the Internet Computer with canister-based Signer
 
-[![codecov](https://codecov.io/gh/Uniswap/interface/branch/main/graph/badge.svg?token=YVT2Y86O82)](https://codecov.io/gh/Uniswap/interface)
+## Overview
 
-[![Unit Tests](https://github.com/Uniswap/interface/actions/workflows/unit-tests.yaml/badge.svg)](https://github.com/Uniswap/interface/actions/workflows/unit-tests.yaml)
-[![Integration Tests](https://github.com/Uniswap/interface/actions/workflows/integration-tests.yaml/badge.svg)](https://github.com/Uniswap/interface/actions/workflows/integration-tests.yaml)
-[![Lint](https://github.com/Uniswap/interface/actions/workflows/lint.yml/badge.svg)](https://github.com/Uniswap/interface/actions/workflows/lint.yml)
-[![Release](https://github.com/Uniswap/interface/actions/workflows/release.yaml/badge.svg)](https://github.com/Uniswap/interface/actions/workflows/release.yaml)
-[![Crowdin](https://badges.crowdin.net/uniswap-interface/localized.svg)](https://crowdin.com/project/uniswap-interface)
+Canister smart contracts on the [Internet Computer](https://internetcomputer.org)(IC) can serve web applications directly to browsers. This can be utilized by protocols built on other blockchain platforms to host user interfaces reliably and securely. This example demonstrates this for the open-source [Uniswap interface](https://github.com/Uniswap/interface) to interact with the Uniswap protocol. The cool thing: Having the user interface on the Internet Computer can enable the autonomous upgrading of interfaces controlled by a DAO.
 
-An open source interface for Uniswap -- a protocol for decentralized exchange of Ethereum tokens.
+Furthermore, this example includes the usage of a simple canister-based signer, where signatures can be authorized using [WebAuthn](https://webauthn.io/), and the signatures are created by the Internet Computer using [Chain-key signatures](https://internetcomputer.org/docs/current/developer-docs/integrations/t-ecdsa/)(threshold ECDSA). The implementation is simplified and shouldn't be used with main net tokens, since there is no guarantee that this canister-based signer will not run out of cycles. Also, there's currently no way to transfer funds to another wallet. The only thing you can do is swap tokens on Uniswap.
 
-- Website: [uniswap.org](https://uniswap.org/)
-- Interface: [app.uniswap.org](https://app.uniswap.org)
-- Docs: [uniswap.org/docs/](https://docs.uniswap.org/)
-- Twitter: [@Uniswap](https://twitter.com/Uniswap)
-- Reddit: [/r/Uniswap](https://www.reddit.com/r/Uniswap/)
-- Email: [contact@uniswap.org](mailto:contact@uniswap.org)
-- Discord: [Uniswap](https://discord.gg/FCfyBSbCU5)
-- Whitepapers:
-  - [V1](https://hackmd.io/C-DvwDSfSxuh-Gd4WKE_ig)
-  - [V2](https://uniswap.org/whitepaper.pdf)
-  - [V3](https://uniswap.org/whitepaper-v3.pdf)
+## Usage demo
 
-## Accessing the Uniswap Interface
+https://user-images.githubusercontent.com/1970182/219301859-74a3403f-010a-4fb6-824b-529abd047db7.mp4
 
-To access the Uniswap Interface, use an IPFS gateway link from the
-[latest release](https://github.com/Uniswap/uniswap-interface/releases/latest),
-or visit [app.uniswap.org](https://app.uniswap.org).
+https://twitter.com/dominic_w/status/1574546360418070528
 
-## Unsupported tokens
+[Presentation at DFINITY Global R&D](https://www.youtube.com/live/Q9FJtye_-6E?feature=share&t=2823)
 
-Check out `useUnsupportedTokenList()` in [src/state/lists/hooks.ts](./src/state/lists/hooks.ts) for blocking tokens in your instance of the interface.
+## Build & Deploy
 
-You can block an entire list of tokens by passing in a tokenlist like [here](./src/constants/lists.ts)
+### Prerequisites
 
-## Contributions
+- [dfx](https://internetcomputer.org/docs/current/developer-docs/setup/install/) 
+- node v14.18.0 (I recommend using [nvm](https://github.com/nvm-sh/nvm))
+- [yarn](https://yarnpkg.com/getting-started/install)
 
-For steps on local deployment, development, and code contribution, please see [CONTRIBUTING](./CONTRIBUTING.md).
+### Infura API Keys
 
-#### PR Title
-Your PR title must follow [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/#summary), and should start with one of the following [types](https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#type):
+Before you start you need to get an API from [Infura](https//infura.io) and add it to line 19 of `/src/interface/src/internet-computer/index.ts`.
 
-- build: Changes that affect the build system or external dependencies (example scopes: yarn, eslint, typescript)
-- ci: Changes to our CI configuration files and scripts (example scopes: vercel, github, cypress)
-- docs: Documentation only changes
-- feat: A new feature
-- fix: A bug fix
-- perf: A code change that improves performance
-- refactor: A code change that neither fixes a bug nor adds a feature
-- style: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
-- test: Adding missing tests or correcting existing tests
+```js
+const INFURA_API_KEY = "Enter your API key here";
+```
 
-Example commit messages:
+### Build & Deploy to local node
 
-- feat: adds support for gnosis safe wallet
-- fix: removes a polling memory leak
-- chore: bumps redux version
+```bash
+dfx start --clean
+yarn run setup
+```
 
-Other things to note:
+This will start a local Internet Computer node and deploy the project to the local node.
+After a while, you should see something like
 
-- Please describe the change using verb statements (ex: Removes X from Y)
-- PRs with multiple changes should use a list of verb statements
-- Add any relevant unit / integration tests
-- Changes will be previewable via vercel. Non-obvious changes should include instructions for how to reproduce them
+![terminal](./assets/terminal.png)
+
+and you can navigate your browser to the (Uniswap) interface: `http://127.0.0.1:4943/?canisterId=rrkah-fqaaa-aaaaa-aaaaq-cai` (in this case).
 
 
-## Accessing Uniswap V2
+### Live Reload
 
-The Uniswap Interface supports swapping, adding liquidity, removing liquidity and migrating liquidity for Uniswap protocol V2.
+To start the UI in a dev server with hot-reload use
+```bash
+yarn run start
+```
 
-- Swap on Uniswap V2: <https://app.uniswap.org/#/swap?use=v2>
-- View V2 liquidity: <https://app.uniswap.org/#/pools/v2>
-- Add V2 liquidity: <https://app.uniswap.org/#/add/v2>
-- Migrate V2 liquidity to V3: <https://app.uniswap.org/#/migrate/v2>
+### Deploy to IC
 
-## Accessing Uniswap V1
+To deploy to the Internet Computer (i.e. mainnet), you'll first need some cycles to pay for the deployment. The simplest way to do this is to get a coupon from the [cycles faucet](https://faucet.dfinity.org). More info on how to get cycles can be found in the [docs](https://internetcomputer.org/docs/current/developer-docs/setup/cycles/).
 
-The Uniswap V1 interface for mainnet and testnets is accessible via IPFS gateways
-linked from the [v1.0.0 release](https://github.com/Uniswap/uniswap-interface/releases/tag/v1.0.0).
+If you've set up a cycles wallet with some cycles, you can use the following commands to deploy the interface and the signing canister to the IC:
+
+```bash
+dfx deploy --network ic signer --argument '(opt variant { Production } )'
+dfx deploy interface
+```
+
+The install argument is required since the threshold ECDSA keys provided by the Internet Computer have different names on the local node and on the IC.
+
+
+## Live Deployment
+
+I've deployed the project to the IC. You can interact with the Uniswap interface at:
+```
+https://yrog5-xqaaa-aaaap-qa5za-cai.ic0.app/
+```
+
+If you want to swap some tokens, you'll need testnet (Goerli) ETH in your canister wallet first. You can request testnet ETH at http://goerlifaucet.com.
+
+You can interact with the deployed version of the signer using Candid UI at:
+```
+https://a4gq6-oaaaa-aaaab-qaa4q-cai.raw.ic0.app/?id=ywpaj-2iaaa-aaaap-qa5zq-cai
+```
+## Architecture
+
+![architecture](./assets/uniswap_ui_on_ic_architecture.png)
+
+### Static UI in asset canister
+
+The open-source interface is built and uploaded to an asset canister on the Internet Computer. The relevant configuration can be seen in the [`dfx.json`](./dfx.json) configuration:
+
+```js
+"frontend": {
+      "frontend": {
+        "entrypoint": "build/index.html"
+      },
+      "source": ["build"],
+      "type": "assets"
+    },
+```
+An asset canister serves certified assets, i.e. a client can verify the authenticity of the assets. Since browsers don't have native support for the certification protocol the Internet Computer uses, a service worker served by the Boundary Nodes of the Internet Computer verifies the certification currently. 
+
+### Internet Computer Provider Implementation
+
+To demonstrate the canister-based signer, we implemented an [EIP-1193](https://eips.ethereum.org/EIPS/eip-1193) compatible provider. The provider mostly uses an Infura RPC provider under the hood, but interacts with the signer canister to get the Ethereum account and to sign transactions. Furthermore, the provider uses Internet Identity to authenticate the user to the signer canister, such that each user controls a unique Ethereum account.
+
+The code can be found in [`/src/internet-computer/index.ts`](/src/internet-computer/index.ts).
+
+
+### Internet Identity
+
+We use Internet Identity for secure authentication to the signer canister. Internet Identity is a service deployed to the Internet Computer. For local testing, we need to set up the service locally. The relevant configuration can be seen in the [`dfx.json`](./dfx.json) configuration:
+
+```js
+"internet_identity": {
+    "type": "custom",
+    "candid": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity.did",
+    "wasm": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity_dev.wasm.gz",
+    "remote": {
+        "id": {
+          "ic": "rdmx6-jaaaa-aaaaa-aaadq-cai"
+        }
+    },
+    "frontend": {}
+}
+```
+
+### Canister Signer
+
+The canister signer uses the threshold ECDSA interface of the IC to provide an Ethereum address and signing capabilities to each user of the canister. Each user gets a unique public key that corresponds to an Ethereum address and each user can demand signatures signed with the corresponding private key. 
+
+The code is based on the [threshold ECDSA example](https://internetcomputer.org/docs/current/samples/t-ecdsa-sample). For a more complete example of a canister-based wallet have a look at [ic-evm-sign](https://www.tzionis.com/projects/ic-evm-sign).
+
+For production wallets, check out [AstroX Me](https://astrox.me/) and [NFID](https://nfid.one/).

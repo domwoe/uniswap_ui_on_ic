@@ -6,11 +6,14 @@ import { MetaMask } from '@web3-react/metamask'
 import { Network } from '@web3-react/network'
 import { Actions, Connector } from '@web3-react/types'
 import GNOSIS_ICON from 'assets/images/gnosis.png'
+import IC_ICON from 'assets/images/internetComputerIcon.svg'
 import UNISWAP_LOGO from 'assets/svg/logo.svg'
 import COINBASE_ICON from 'assets/wallets/coinbase-icon.svg'
 import UNIWALLET_ICON from 'assets/wallets/uniswap-wallet-icon.png'
 import WALLET_CONNECT_ICON from 'assets/wallets/walletconnect-icon.svg'
 import { isMobile, isNonIOSPhone } from 'utils/userAgent'
+
+import { InternetComputer } from '../internet-computer'
 
 import { RPC_URLS } from '../constants/networks'
 import { RPC_PROVIDERS } from '../constants/providers'
@@ -67,6 +70,18 @@ export const gnosisSafeConnection: Connection = {
   type: ConnectionType.GNOSIS_SAFE,
   getIcon: () => GNOSIS_ICON,
   shouldDisplay: () => false,
+}
+
+const [web3InternetComputer, web3InternetComputerHooks] = initializeConnector<InternetComputer>(
+  (actions) => new InternetComputer({ actions })
+)
+export const internetComputerConnection: Connection = {
+  getName: () => 'Internet Computer',
+  connector: web3InternetComputer,
+  hooks: web3InternetComputerHooks,
+  type: ConnectionType.INTERNET_COMPUTER,
+  getIcon: () => IC_ICON,
+  shouldDisplay: () => true,
 }
 
 export const walletConnectV2Connection: Connection = new (class implements Connection {
@@ -143,6 +158,7 @@ export function getConnections() {
     walletConnectV2Connection,
     coinbaseWalletConnection,
     gnosisSafeConnection,
+    internetComputerConnection,
     networkConnection,
   ]
 }
@@ -168,6 +184,8 @@ export function getConnection(c: Connector | ConnectionType) {
         return networkConnection
       case ConnectionType.GNOSIS_SAFE:
         return gnosisSafeConnection
+      case ConnectionType.INTERNET_COMPUTER:
+        return internetComputerConnection
     }
   }
 }

@@ -1,5 +1,10 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
+# dfx
+/.dfx
+
+# Rust builds
+/target
 
 # generated contract types
 /src/types/v3

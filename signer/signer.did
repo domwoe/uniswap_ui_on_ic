@@ -1,0 +1,7 @@
+service : ( opt variant {  Development; Staging; Production; } ) -> {
+
+  public_key : () -> (variant { Ok: record { public_key: blob; }; Err: text });
+  public_key_query : () -> (variant { Ok: record { public_key: blob; }; Err: text }) query;
+  sign : (blob) -> (variant { Ok: record { signature: blob; }; Err: text });
+
+}

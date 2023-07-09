@@ -5,7 +5,7 @@ const { execSync } = require('child_process')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const path = require('path')
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin')
-const { DefinePlugin, IgnorePlugin, ProvidePlugin } = require('webpack')
+const { DefinePlugin, EnvironmentPlugin, IgnorePlugin, ProvidePlugin } = require('webpack')
 const { RetryChunkLoadPlugin } = require('webpack-retry-chunk-load-plugin')
 
 const commitHash = execSync('git rev-parse HEAD').toString().trim()
@@ -19,6 +19,36 @@ function getCacheDirectory(cacheName) {
   // Include the trailing slash to denote that this is a directory.
   return `${path.join(__dirname, 'node_modules/.cache/', cacheName)}/`
 }
+
+const network = process.env.DFX_NETWORK || (process.env.NODE_ENV === 'production' ? 'ic' : 'local')
+function initCanisterEnv() {
+  let localCanisters, prodCanisters
+  try {
+    let p = path.resolve('.dfx', 'local', 'canister_ids.json')
+    localCanisters = require(p)
+  } catch (error) {
+    console.log('No local canister_ids.json found. Continuing production')
+  }
+  try {
+    prodCanisters = require(path.resolve('canister_ids.json'))
+  } catch (error) {
+    console.log('No production canister_ids.json found. Continuing with local')
+  }
+
+  const canisterConfig = network === 'local' ? localCanisters : prodCanisters
+
+  return Object.entries(canisterConfig).reduce((prev, current) => {
+    const [canisterName, canisterDetails] = current
+    prev[canisterName.toUpperCase() + '_CANISTER_ID'] = canisterDetails[network]
+    return prev
+  }, {})
+}
+const canisterEnvVariables = initCanisterEnv()
+
+const internetIdentityUrl =
+  network === 'local'
+    ? `http://localhost:4943/?canisterId=${canisterEnvVariables['INTERNET_IDENTITY_CANISTER_ID']}`
+    : `https://identity.ic0.app`
 
 module.exports = {
   babel: {
@@ -103,6 +133,12 @@ module.exports = {
           return 2 ** (retryAttempt - 1) * 500;
         }`,
         maxRetries: 3,
+      }),
+      new EnvironmentPlugin({
+        NODE_ENV: 'development',
+        DFX_NETWORK: 'local',
+        II_URL: internetIdentityUrl,
+        ...canisterEnvVariables,
       }),
     ],
     configure: (webpackConfig) => {
